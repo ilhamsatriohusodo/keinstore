@@ -25,9 +25,18 @@
                     <p class="text-xs text-indigo-500 font-medium">Subscription & Digital Products</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-medium border border-emerald-200 shadow-xs">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Online & Ready</span>
+
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-medium border border-emerald-200 shadow-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Online & Ready</span>
+                </div>
+                
+                <!-- Tombol Keranjang Belanja di Header -->
+                <button onclick="openCartModal()" class="relative bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-xl shadow-md transition flex items-center space-x-2 text-xs font-bold">
+                    <span>🛒 Keranjang</span>
+                    <span id="cart-badge" class="bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full text-[10px] font-extrabold hidden">0</span>
+                </button>
             </div>
         </div>
     </header>
@@ -48,7 +57,7 @@
         <!-- Section Katalog -->
         <div class="mb-4 flex items-center justify-between">
             <h3 class="font-bold text-lg text-indigo-950">Daftar Produk Ready</h3>
-            <span class="text-xs text-indigo-500 font-medium">Tap produk untuk beli</span>
+            <span class="text-xs text-indigo-500 font-medium">Tap produk untuk tambah ke keranjang</span>
         </div>
 
         <!-- Grid Produk -->
@@ -73,7 +82,7 @@
         <p>&copy; 2026 KeinStore. All rights reserved.</p>
     </footer>
 
-    <!-- MODAL DETAIL PRODUK & S&K -->
+    <!-- MODAL DETAIL PRODUK -->
     <div id="detail-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
             <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
@@ -85,16 +94,39 @@
             <p class="text-xs text-slate-500 mb-4">Mohon baca informasi penting di bawah ini dengan teliti sebelum membeli.</p>
 
             <div id="detail-content" class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 text-xs text-slate-700 space-y-3 leading-relaxed mb-6 max-h-72 overflow-y-auto">
-                <!-- Konten dinamis deskripsi -->
+                <!-- Konten dinamis -->
             </div>
 
-            <button onclick="proceedFromDetail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md">
+            <button id="btn-add-from-detail" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md">
+                + Masukkan ke Keranjang 🛒
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL KERANJANG BELANJA -->
+    <div id="cart-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
+            <button onclick="closeCartModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+            
+            <h3 class="text-lg font-bold text-indigo-950 mb-1">🛒 Keranjang Belanja Anda</h3>
+            <p class="text-xs text-slate-500 mb-4">Daftar produk yang ingin Anda beli sekaligus.</p>
+
+            <div id="cart-items-container" class="space-y-3 mb-4 max-h-60 overflow-y-auto">
+                <!-- List item keranjang -->
+            </div>
+
+            <div class="border-t border-slate-200 pt-3 mb-5 flex justify-between items-center">
+                <span class="text-sm font-bold text-slate-700">Total Pembayaran:</span>
+                <span id="cart-total-price" class="text-base font-extrabold text-blue-700">Rp 0</span>
+            </div>
+
+            <button onclick="proceedToCheckout()" id="btn-proceed-checkout" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md hidden">
                 Lanjut ke Pembayaran 🚀
             </button>
         </div>
     </div>
 
-    <!-- MODAL CHECKOUT -->
+    <!-- MODAL CHECKOUT & PEMBAYARAN -->
     <div id="checkout-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
             <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
@@ -103,11 +135,6 @@
             <p class="text-xs text-slate-500 mb-4">Pilih metode pembayaran dan lengkapi data diri Anda.</p>
 
             <form id="order-form" onsubmit="sendToWhatsApp(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Produk Pilihan</label>
-                    <input type="text" id="selected-product" readonly class="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 font-medium cursor-not-allowed">
-                </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Pemesan</label>
@@ -138,7 +165,7 @@
                         <img src="qris.jpeg" alt="QRIS KeinStore" class="w-48 h-auto mx-auto rounded block">
                     </div>
                     <p class="text-xs text-slate-500">Merchant: <strong class="text-indigo-950">KeinStore</strong></p>
-                    <p id="modal-price" class="text-sm font-extrabold text-blue-700 mt-1"></p>
+                    <p id="checkout-modal-price" class="text-sm font-extrabold text-blue-700 mt-1">Rp 0</p>
                 </div>
 
                 <!-- Bagian Info Rekening Bank / E-Wallet -->
@@ -266,10 +293,11 @@
             }
         };
 
+        let cart = [];
+        let activeDetailProduct = null;
         const grid = document.getElementById('product-grid');
-        let currentSelectedProduct = null;
-        let currentPriceText = "";
 
+        // Render Produk
         products.forEach(p => {
             const card = document.createElement('div');
             card.className = "bg-white border border-indigo-100 rounded-2xl p-4 flex flex-col justify-between shadow-sm hover:shadow-md hover:border-indigo-300 transition";
@@ -288,8 +316,8 @@
                         <button onclick='openDetailModal(${JSON.stringify(p)})' class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-2 rounded-xl text-xs transition text-center">
                             📖 Detail
                         </button>
-                        <button onclick='openCheckoutDirect("${p.name}", "${p.formattedPrice}")' class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-2 rounded-xl text-xs transition text-center shadow-xs">
-                            Beli Sekarang
+                        <button onclick='addToCart(${JSON.stringify(p)})' class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-2 rounded-xl text-xs transition text-center shadow-xs">
+                            + Keranjang
                         </button>
                     </div>
                 </div>
@@ -297,11 +325,15 @@
             grid.appendChild(card);
         });
 
+        // Detail Modal
         function openDetailModal(product) {
-            currentSelectedProduct = product;
-            currentPriceText = product.formattedPrice;
+            activeDetailProduct = product;
             document.getElementById('detail-title').innerText = product.name;
             document.getElementById('detail-content').innerHTML = product.detail;
+            document.getElementById('btn-add-from-detail').onclick = function() {
+                addToCart(product);
+                closeDetailModal();
+            };
             document.getElementById('detail-modal').classList.remove('hidden');
         }
 
@@ -309,22 +341,83 @@
             document.getElementById('detail-modal').classList.add('hidden');
         }
 
-        function proceedFromDetail() {
-            closeDetailModal();
-            if (currentSelectedProduct) {
-                document.getElementById('selected-product').value = currentSelectedProduct.name;
-                document.getElementById('modal-price').innerText = `Total: ${currentSelectedProduct.formattedPrice}`;
-                document.getElementById('payment-method').value = "QRIS";
-                togglePaymentDisplay();
-                document.getElementById('checkout-modal').classList.remove('hidden');
+        // Cart Logic
+        function addToCart(product) {
+            const existing = cart.find(item => item.id === product.id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            updateCartUI();
+            alert(`Berhasil menambahkan "${product.name}" ke keranjang! 🛒`);
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
             }
         }
 
-        function openCheckoutDirect(productName, formattedPrice) {
-            currentSelectedProduct = { name: productName, formattedPrice: formattedPrice };
-            currentPriceText = formattedPrice;
-            document.getElementById('selected-product').value = productName;
-            document.getElementById('modal-price').innerText = `Total: ${formattedPrice}`;
+        function openCartModal() {
+            const container = document.getElementById('cart-items-container');
+            const totalPriceEl = document.getElementById('cart-total-price');
+            const btnProceed = document.getElementById('btn-proceed-checkout');
+
+            container.innerHTML = "";
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Keranjang belanja Anda masih kosong.</p>`;
+                totalPriceEl.innerText = "Rp 0";
+                btnProceed.classList.add('hidden');
+                document.getElementById('cart-modal').classList.remove('hidden');
+                return;
+            }
+
+            let grandTotal = 0;
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.qty;
+                grandTotal += itemTotal;
+
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-slate-50 border border-slate-200 p-3 rounded-xl";
+                div.innerHTML = `
+                    <div>
+                        <h5 class="text-xs font-bold text-indigo-950">${item.name}</h5>
+                        <p class="text-[11px] text-slate-500">${item.formattedPrice} x ${item.qty}</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs font-extrabold text-blue-700">Rp ${itemTotal.toLocaleString('id-ID')}</span>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 font-bold text-xs px-1.5 py-0.5 bg-red-50 rounded">&times;</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            totalPriceEl.innerText = `Rp ${grandTotal.toLocaleString('id-ID')}`;
+            btnProceed.classList.remove('hidden');
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+
+        function closeCartModal() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+            openCartModal();
+        }
+
+        function proceedToCheckout() {
+            closeCartModal();
+            const grandTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            document.getElementById('checkout-modal-price').innerText = `Total: Rp ${grandTotal.toLocaleString('id-ID')}`;
             document.getElementById('payment-method').value = "QRIS";
             togglePaymentDisplay();
             document.getElementById('checkout-modal').classList.remove('hidden');
@@ -355,7 +448,6 @@
 
         function sendToWhatsApp(e) {
             e.preventDefault();
-            const product = document.getElementById('selected-product').value;
             const name = document.getElementById('buyer-name').value;
             const buyerWa = document.getElementById('buyer-wa').value;
             const method = document.getElementById('payment-method').value;
@@ -367,7 +459,16 @@
             const timeStr = String(now.getHours()).padStart(2, '0') + '.' + String(now.getMinutes()).padStart(2, '0') + '.' + String(now.getSeconds()).padStart(2, '0');
             const formattedTime = `${dateStr}, ${timeStr}`;
 
-            const text = `Halo Admin Keinstore, saya sudah melakukan pembayaran dan ingin konfirmasi.%0A%0AOrder ID: ${orderId}%0ANama: ${name}%0AProduk: ${product}%0ADurasi: 1 Bulan sharing%0ATotal: ${currentPriceText}%0AMetode: ${method}%0AWaktu: ${formattedTime}%0A%0ASaya akan kirim screenshot invoice/pesanan + bukti pembayaran setelah ini. Terima kasih.`;
+            // Rincian Produk dari Keranjang
+            let productListStr = "";
+            let grandTotal = 0;
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.qty;
+                grandTotal += itemTotal;
+                productListStr += `%0A  ${index + 1}. ${item.name} (x${item.qty}) - Rp ${itemTotal.toLocaleString('id-ID')}`;
+            });
+
+            const text = `Halo Admin Keinstore, saya sudah melakukan pembayaran dan ingin konfirmasi pesanan.%0A%0AOrder ID: ${orderId}%0ANama: ${name}%0ANo. WA: ${buyerWa}%0A%0ADaftar Produk Belanjaan:${productListStr}%0A%0ATotal Pembayaran: Rp ${grandTotal.toLocaleString('id-ID')}%0AMetode: ${method}%0AWaktu: ${formattedTime}%0A%0ASaya akan kirim screenshot invoice/pesanan + bukti pembayaran setelah ini. Terima kasih.`;
             
             const adminNumber = "6282138188404";
             window.open(`https://wa.me/${adminNumber}?text=${text}`, '_blank');
