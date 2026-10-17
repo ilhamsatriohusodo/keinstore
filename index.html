@@ -35,7 +35,7 @@
     <!-- Main Content -->
     <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
         
-        <!-- Banner Promo (Gradasi Biru-Ungu ala Logo) -->
+        <!-- Banner Promo -->
         <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 text-white rounded-2xl p-6 mb-8 shadow-xl relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
             <div class="relative z-10">
@@ -79,7 +79,7 @@
             <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
             
             <h3 class="text-lg font-bold text-indigo-950 mb-1">Konfirmasi Pesanan</h3>
-            <p class="text-xs text-slate-500 mb-4">Selesaikan pembayaran QRIS lalu upload bukti transfer.</p>
+            <p class="text-xs text-slate-500 mb-4">Pilih metode pembayaran dan lengkapi data diri Anda.</p>
 
             <form id="order-form" onsubmit="sendToWhatsApp(event)" class="space-y-4">
                 <div>
@@ -98,8 +98,20 @@
                     </div>
                 </div>
 
-                <!-- Bagian QRIS qris.jpeg -->
-                <div class="border border-dashed border-indigo-200 rounded-xl p-4 bg-indigo-50/40 text-center">
+                <!-- Pilihan Metode Pembayaran -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Pilih Metode Pembayaran</label>
+                    <select id="payment-method" onchange="togglePaymentDisplay()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-600 focus:outline-none font-medium bg-white">
+                        <option value="QRIS">⚡ QRIS (Instant & Otomatis)</option>
+                        <option value="DANA">🟢 DANA (082138188404 - Ilham Satrio Husodo)</option>
+                        <option value="Seabank">🔵 Seabank (901826486520 - Ilham Satrio Husodo)</option>
+                        <option value="BRI">🟠 BRI (673601010630533 - Ilham Satrio Husodo)</option>
+                        <option value="BCA">🟦 BCA (7751061106 - Ilham Satrio Husodo)</option>
+                    </select>
+                </div>
+
+                <!-- Bagian Tampilan QRIS (Hanya muncul jika metode QRIS dipilih) -->
+                <div id="qris-section" class="border border-dashed border-indigo-200 rounded-xl p-4 bg-indigo-50/40 text-center">
                     <p class="text-xs font-bold text-indigo-950 mb-2">Scan QRIS untuk Pembayaran</p>
                     <div class="bg-white p-2 inline-block rounded-lg shadow-sm border border-indigo-100 mb-2">
                         <img src="qris.jpeg" alt="QRIS KeinStore" class="w-48 h-auto mx-auto rounded block">
@@ -108,10 +120,22 @@
                     <p id="modal-price" class="text-sm font-extrabold text-blue-700 mt-1"></p>
                 </div>
 
-                <!-- Upload Bukti TF -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Lampirkan Bukti Transfer (Screenshot)</label>
-                    <input type="file" id="transfer-proof" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 border border-slate-300 rounded-lg cursor-pointer">
+                <!-- Bagian Info Rekening Bank / E-Wallet (Muncul jika metode Bank/DANA dipilih) -->
+                <div id="bank-info-section" class="hidden border border-indigo-200 rounded-xl p-4 bg-indigo-50/60">
+                    <div class="flex items-center space-x-3">
+                        <div id="bank-logo-container" class="w-10 h-10 rounded-lg bg-white border border-indigo-100 flex items-center justify-center p-1 shadow-xs shrink-0">
+                            <!-- Logo Bank Dinamis -->
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-medium" id="bank-name-label">Transfer ke:</p>
+                            <p class="text-sm font-bold text-indigo-950" id="bank-account-number">-</p>
+                            <p class="text-[11px] text-slate-600 font-medium" id="bank-account-name">A/N Ilham Satrio Husodo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-amber-800 text-[11px] leading-relaxed">
+                    💡 <b>Catatan:</b> Setelah mengklik tombol di bawah, Anda akan diarahkan ke WhatsApp Admin. Silakan kirimkan screenshot bukti transfer/pembayaran di chat tersebut agar pesanan langsung diproses!
                 </div>
 
                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md flex items-center justify-center space-x-2">
@@ -189,7 +213,33 @@
             }
         ];
 
+        // Data detail rekening dengan SVG Logo Bank/E-Wallet resmi yang bersih & eye-catching
+        const paymentDetails = {
+            "QRIS": { label: "QRIS All Payment", number: "Scan QR Code di atas" },
+            "DANA": { 
+                label: "DANA E-Wallet", 
+                number: "082138188404", 
+                logo: `<svg viewBox="0 0 24 24" class="w-full h-full" fill="#108EE9"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.25 15.5h-2.5v-7h2.5v7zm-1.25-8.25c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>` 
+            },
+            "Seabank": { 
+                label: "Seabank Indonesia", 
+                number: "901826486520", 
+                logo: `<svg viewBox="0 0 24 24" class="w-full h-full" fill="#FF5722"><circle cx="12" cy="12" r="10"/><path fill="#fff" d="M8 12h8v2H8z"/></svg>` 
+            },
+            "BRI": { 
+                label: "Bank Rakyat Indonesia (BRI)", 
+                number: "673601010630533", 
+                logo: `<svg viewBox="0 0 24 24" class="w-full h-full" fill="#003B70"><rect width="24" height="24" rx="4"/><text x="4" y="16" fill="#fff" font-size="10" font-weight="bold">BRI</text></svg>` 
+            },
+            "BCA": { 
+                label: "Bank Central Asia (BCA)", 
+                number: "7751061106", 
+                logo: `<svg viewBox="0 0 24 24" class="w-full h-full" fill="#00539F"><rect width="24" height="24" rx="4"/><text x="3" y="16" fill="#fff" font-size="10" font-weight="bold">BCA</text></svg>` 
+            }
+        };
+
         const grid = document.getElementById('product-grid');
+        let currentPriceText = "";
 
         products.forEach(p => {
             const card = document.createElement('div');
@@ -215,7 +265,10 @@
 
         function openCheckout(productName, formattedPrice) {
             document.getElementById('selected-product').value = productName;
+            currentPriceText = formattedPrice;
             document.getElementById('modal-price').innerText = `Total: ${formattedPrice}`;
+            document.getElementById('payment-method').value = "QRIS";
+            togglePaymentDisplay();
             document.getElementById('checkout-modal').classList.remove('hidden');
         }
 
@@ -223,21 +276,43 @@
             document.getElementById('checkout-modal').classList.add('hidden');
         }
 
+        function togglePaymentDisplay() {
+            const method = document.getElementById('payment-method').value;
+            const qrisSec = document.getElementById('qris-section');
+            const bankSec = document.getElementById('bank-info-section');
+
+            if (method === "QRIS") {
+                qrisSec.classList.remove('hidden');
+                bankSec.classList.add('hidden');
+            } else {
+                qrisSec.classList.add('hidden');
+                bankSec.classList.remove('hidden');
+                
+                const data = paymentDetails[method];
+                document.getElementById('bank-name-label').innerText = data.label;
+                document.getElementById('bank-account-number').innerText = data.number;
+                document.getElementById('bank-logo-container').innerHTML = data.logo || `<span class="text-xs font-bold text-indigo-700">${method}</span>`;
+            }
+        }
+
         function sendToWhatsApp(e) {
             e.preventDefault();
             const product = document.getElementById('selected-product').value;
             const name = document.getElementById('buyer-name').value;
             const buyerWa = document.getElementById('buyer-wa').value;
-            const fileInput = document.getElementById('transfer-proof');
+            const method = document.getElementById('payment-method').value;
 
-            if (fileInput.files.length === 0) {
-                alert("Harap lampirkan bukti transfer terlebih dahulu!");
-                return;
-            }
+            // Generate Order ID Unik
+            const orderId = "ORDER_" + Date.now() + "_" + Math.random().toString(36).substring(2, 7).toUpperCase();
 
-            const fileName = fileInput.files[0].name;
+            // Format Waktu Real-Time (DD/MM/YYYY, HH.MM.SS)
+            const now = new Date();
+            const dateStr = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
+            const timeStr = String(now.getHours()).padStart(2, '0') + '.' + String(now.getMinutes()).padStart(2, '0') + '.' + String(now.getSeconds()).padStart(2, '0');
+            const formattedTime = `${dateStr}, ${timeStr}`;
 
-            const text = `Halo Admin KeinStore,%0A%0ASaya ingin memesan akun digital:%0A- *Produk:* ${product}%0A- *Nama:* ${name}%0A- *No. WA Pembeli:* ${buyerWa}%0A%0ABukti transfer telah dilampirkan (File: ${fileName}). Mohon segera diproses ya kak, terima kasih!`;
+            // Susunan Pesan WhatsApp sesuai permintaan
+            const text = `Halo Admin Keinstore, saya sudah melakukan pembayaran dan ingin konfirmasi.%0A%0AOrder ID: ${orderId}%0ANama: ${name}%0AProduk: ${product}%0ADurasi: 1 Bulan sharing%0ATotal: ${currentPriceText}%0AMetode: ${method}%0AWaktu: ${formattedTime}%0A%0ASaya akan kirim screenshot invoice/pesanan + bukti pembayaran setelah ini. Terima kasih.`;
             
             const adminNumber = "6282138188404";
             window.open(`https://wa.me/${adminNumber}?text=${text}`, '_blank');
