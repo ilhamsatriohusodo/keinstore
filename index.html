@@ -73,10 +73,31 @@
         <p>&copy; 2026 KeinStore. All rights reserved.</p>
     </footer>
 
+    <!-- MODAL DETAIL PRODUK & S&K -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+            
+            <div class="flex items-center space-x-2 mb-2">
+                <span class="text-xl">📋</span>
+                <h3 id="detail-title" class="text-lg font-bold text-indigo-950">Detail & Ketentuan Produk</h3>
+            </div>
+            <p class="text-xs text-slate-500 mb-4">Mohon baca informasi penting di bawah ini dengan teliti sebelum membeli.</p>
+
+            <div id="detail-content" class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 text-xs text-slate-700 space-y-3 leading-relaxed mb-6 max-h-72 overflow-y-auto">
+                <!-- Konten dinamis deskripsi -->
+            </div>
+
+            <button onclick="proceedFromDetail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md">
+                Lanjut ke Pembayaran 🚀
+            </button>
+        </div>
+    </div>
+
     <!-- MODAL CHECKOUT -->
     <div id="checkout-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
             
             <h3 class="text-lg font-bold text-indigo-950 mb-1">Konfirmasi Pesanan</h3>
             <p class="text-xs text-slate-500 mb-4">Pilih metode pembayaran dan lengkapi data diri Anda.</p>
@@ -110,7 +131,7 @@
                     </select>
                 </div>
 
-                <!-- Bagian Tampilan QRIS (Hanya muncul jika metode QRIS dipilih) -->
+                <!-- Bagian Tampilan QRIS -->
                 <div id="qris-section" class="border border-dashed border-indigo-200 rounded-xl p-4 bg-indigo-50/40 text-center">
                     <p class="text-xs font-bold text-indigo-950 mb-2">Scan QRIS untuk Pembayaran</p>
                     <div class="bg-white p-2 inline-block rounded-lg shadow-sm border border-indigo-100 mb-2">
@@ -120,7 +141,7 @@
                     <p id="modal-price" class="text-sm font-extrabold text-blue-700 mt-1"></p>
                 </div>
 
-                <!-- Bagian Info Rekening Bank / E-Wallet (Muncul jika metode Bank/DANA dipilih) -->
+                <!-- Bagian Info Rekening Bank / E-Wallet -->
                 <div id="bank-info-section" class="hidden border border-indigo-200 rounded-xl p-4 bg-indigo-50/60">
                     <div class="flex items-center space-x-3">
                         <div id="bank-logo-container" class="w-10 h-10 rounded-lg bg-white border border-indigo-100 flex items-center justify-center p-1 shadow-xs shrink-0">
@@ -153,7 +174,8 @@
                 price: 10000, 
                 formattedPrice: "Rp 10.000", 
                 desc: "🎬 Nonton bebas iklan sepuasnya, bisa diputar di latar belakang & download video offline kualitas HD!", 
-                badge: "Hemat Banget" 
+                badge: "Hemat Banget",
+                detail: "<b>YouTube Premium 1 Bulan</b><br><br>✨ <b>Fasilitas Utama:</b><br>• Bebas dari segala jenis iklan video.<br>• Fitur Putar Latar Belakang (Background Play).<br>• Bisa download video untuk ditonton secara offline.<br>• Akses gratis ke YouTube Music Premium.<br><br>📌 <b>Ketentuan:</b> Proses cepat, legal, aman, dan bergaransi penuh selama masa langganan aktif." 
             },
             { 
                 id: 2, 
@@ -161,7 +183,8 @@
                 price: 5000, 
                 formattedPrice: "Rp 5.000", 
                 desc: "✨ Unlock semua template premium, hapus latar belakang otomatis, dan akses jutaan elemen eksklusif!", 
-                badge: "Termurah" 
+                badge: "Termurah",
+                detail: "<b>Canva Pro 1 Bulan</b><br><br>🎨 <b>Fasilitas Utama:</b><br>• Akses jutaan template, font, dan elemen grafis pro.<br>• Fitur hapus background (Background Remover) instan.<br>• Ubah ukuran desain otomatis (Magic Resize).<br><br>📌 <b>Ketentuan:</b> Akun undangan resmi bergaransi penuh dan privasi desain aman." 
             },
             { 
                 id: 3, 
@@ -169,7 +192,8 @@
                 price: 25000, 
                 formattedPrice: "Rp 25.000", 
                 desc: "✂️ Unlock semua efek pro, template premium, transisi eksklusif, dan Ekspor video tanpa watermark!", 
-                badge: "Editor Favorit" 
+                badge: "Editor Favorit",
+                detail: "<b>CapCut Pro 1 Bulan</b><br><br>🎬 <b>Fasilitas Utama:</b><br>• Akses seluruh efek, filter, dan transisi berbayar.<br>• Bebas ekspor video kualitas tinggi tanpa watermark.<br>• Fitur AI editing lengkap untuk konten kreator.<br><br>📌 <b>Ketentuan:</b> Akun siap pakai dengan performa stabil dan bergaransi." 
             },
             { 
                 id: 4, 
@@ -177,7 +201,8 @@
                 price: 15000, 
                 formattedPrice: "Rp 15.000", 
                 desc: "🍿 1 Profil khusus buat kamu, kualitas Ultra HD 4K, anti rebutan & anti nobar-nobar club!", 
-                badge: "Populer" 
+                badge: "Populer",
+                detail: "<b>Netflix Sharing 1 Bulan</b><br><br>🍿 <b>Fasilitas Utama:</b><br>• Diberikan 1 Profil khusus atas nama Anda sendiri.<br>• Kualitas streaming maksimal Ultra HD (4K).<br>• Dilarang keras mengubah PIN profil atau email akun.<br><br>📌 <b>Ketentuan:</b> Anti nobar, aman, dan bergaransi penuh selama masa aktif." 
             },
             { 
                 id: 5, 
@@ -185,7 +210,8 @@
                 price: 25000, 
                 formattedPrice: "Rp 25.000", 
                 desc: "👑 Pegang full 1 akun sendiri! Privasi 100% aman tanpa gangguan orang lain.", 
-                badge: "Best Value" 
+                badge: "Best Value",
+                detail: "<b>Netflix Private 1 Bulan</b><br><br>👑 <b>Fasilitas Utama:</b><br>• Full akses 1 akun privat sepenuhnya milik Anda sendiri.<br>• Bebas buat profil dan atur PIN sesuka hati.<br>• Keamanan privasi terjamin 100% tanpa campur tangan pengguna lain.<br><br>📌 <b>Ketentuan:</b> Kualitas premium dengan garansi penuh." 
             },
             { 
                 id: 6, 
@@ -193,7 +219,8 @@
                 price: 30000, 
                 formattedPrice: "Rp 30.000", 
                 desc: "🎵 Bebas skip lagu tanpa batas, kualitas audio jernih (Very High), download lagu favorit untuk didengar offline.", 
-                badge: "Musik" 
+                badge: "Musik",
+                detail: "<b>Spotify Premium 1 Bulan</b><br><br>🎵 <b>Fasilitas Utama:</b><br>• Bebas skip lagu tanpa batas iklan.<br>• Kualitas audio jernih tingkat Very High.<br>• Download jutaan lagu untuk diputar offline.<br><br>📌 <b>Ketentuan:</b> Legal, aman, dan bergaransi resmi." 
             },
             { 
                 id: 7, 
@@ -201,7 +228,8 @@
                 price: 30000, 
                 formattedPrice: "Rp 30.000", 
                 desc: "🤖 Akses sepuasnya ke GPT-4o canggih, analisis data cepat, buat teks, coding, & gambar tanpa batas!", 
-                badge: "AI Favorite" 
+                badge: "AI Favorite",
+                detail: "<b>🤖 INFORMASI PENTING CHATGPT PLUS SHARING</b><br><br>Harap diperhatikan dan dibaca baik-baik sebelum melakukan transaksi:<br><br>• <b>Sistem Akses:</b> Akun disiapkan langsung oleh admin dengan sistem berbagi (sharing) bersama beberapa pengguna lain secara tertib.<br>• <b>Batasan Perangkat:</b> Setiap pembelian berlaku untuk login di <b>1 perangkat</b> saja.<br>• <b>Dukungan Garansi:</b> Dilindungi garansi layanan aktif selama 25 hari.<br><br>⚠️ <b>Catatan Pemakaian Akun Sharing:</b><br>Karena digunakan bersama, kendala seperti pembatasan limit (*rate limit*) sesekali atau gangguan kecil pada fitur unggah file merupakan hal yang lumrah pada sistem sharing.<br><br>✅ Fitur utama chatbot AI tetap bisa diandalkan dengan lancar.<br>❌ Tidak ada fasilitas tukar akun terkecuali jika terjadi pemblokiran total (*deactivated*).<br><br>📌 <i>Dengan memesan, Anda dianggap telah membaca serta menyetujui seluruh ketentuan di atas.</i>" 
             },
             { 
                 id: 8, 
@@ -209,11 +237,11 @@
                 price: 30000, 
                 formattedPrice: "Rp 30.000", 
                 desc: "🚀 Nikmati fitur canggih Google AI tingkat lanjut untuk bantu nulis, riset, dan produktivitas harianmu!", 
-                badge: "AI Pro" 
+                badge: "AI Pro",
+                detail: "<b>Gemini AI Pro 1 Bulan (Sharing)</b><br><br>🚀 <b>Fasilitas Utama:</b><br>• Akses model AI tingkat lanjut dari Google untuk riset dan analisis.<br>• Kapasitas konteks luas untuk membantu produktivitas harian.<br>• Sistem sharing terkelola dengan baik oleh admin.<br><br>📌 <b>Ketentuan:</b> Bergaransi dan didukung penuh selama masa langganan." 
             }
         ];
 
-        // Data detail rekening dengan SVG Logo Bank/E-Wallet resmi yang bersih & eye-catching
         const paymentDetails = {
             "QRIS": { label: "QRIS All Payment", number: "Scan QR Code di atas" },
             "DANA": { 
@@ -239,6 +267,7 @@
         };
 
         const grid = document.getElementById('product-grid');
+        let currentSelectedProduct = null;
         let currentPriceText = "";
 
         products.forEach(p => {
@@ -251,28 +280,57 @@
                         <span class="text-xs text-slate-400 font-medium">1 Bulan</span>
                     </div>
                     <h4 class="font-bold text-indigo-950 text-base mb-1">${p.name}</h4>
-                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">${p.desc}</p>
+                    <p class="text-xs text-slate-500 mb-3 leading-relaxed">${p.desc}</p>
                 </div>
-                <div>
-                    <div class="text-blue-700 font-extrabold text-lg mb-3">${p.formattedPrice}</div>
-                    <button onclick="openCheckout('${p.name}', '${p.formattedPrice}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-xl text-xs transition shadow-xs">
-                        Beli Sekarang
-                    </button>
+                <div class="space-y-2">
+                    <div class="text-blue-700 font-extrabold text-lg">${p.formattedPrice}</div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick='openDetailModal(${JSON.stringify(p)})' class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-2 rounded-xl text-xs transition text-center">
+                            📖 Detail
+                        </button>
+                        <button onclick='openCheckoutDirect("${p.name}", "${p.formattedPrice}")' class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-2 rounded-xl text-xs transition text-center shadow-xs">
+                            Beli Sekarang
+                        </button>
+                    </div>
                 </div>
             `;
             grid.appendChild(card);
         });
 
-        function openCheckout(productName, formattedPrice) {
-            document.getElementById('selected-product').value = productName;
+        function openDetailModal(product) {
+            currentSelectedProduct = product;
+            currentPriceText = product.formattedPrice;
+            document.getElementById('detail-title').innerText = product.name;
+            document.getElementById('detail-content').innerHTML = product.detail;
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+
+        function proceedFromDetail() {
+            closeDetailModal();
+            if (currentSelectedProduct) {
+                document.getElementById('selected-product').value = currentSelectedProduct.name;
+                document.getElementById('modal-price').innerText = `Total: ${currentSelectedProduct.formattedPrice}`;
+                document.getElementById('payment-method').value = "QRIS";
+                togglePaymentDisplay();
+                document.getElementById('checkout-modal').classList.remove('hidden');
+            }
+        }
+
+        function openCheckoutDirect(productName, formattedPrice) {
+            currentSelectedProduct = { name: productName, formattedPrice: formattedPrice };
             currentPriceText = formattedPrice;
+            document.getElementById('selected-product').value = productName;
             document.getElementById('modal-price').innerText = `Total: ${formattedPrice}`;
             document.getElementById('payment-method').value = "QRIS";
             togglePaymentDisplay();
             document.getElementById('checkout-modal').classList.remove('hidden');
         }
 
-        function closeModal() {
+        function closeCheckoutModal() {
             document.getElementById('checkout-modal').classList.add('hidden');
         }
 
@@ -302,16 +360,13 @@
             const buyerWa = document.getElementById('buyer-wa').value;
             const method = document.getElementById('payment-method').value;
 
-            // Generate Order ID Unik
             const orderId = "ORDER_" + Date.now() + "_" + Math.random().toString(36).substring(2, 7).toUpperCase();
 
-            // Format Waktu Real-Time (DD/MM/YYYY, HH.MM.SS)
             const now = new Date();
             const dateStr = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
             const timeStr = String(now.getHours()).padStart(2, '0') + '.' + String(now.getMinutes()).padStart(2, '0') + '.' + String(now.getSeconds()).padStart(2, '0');
             const formattedTime = `${dateStr}, ${timeStr}`;
 
-            // Susunan Pesan WhatsApp sesuai permintaan
             const text = `Halo Admin Keinstore, saya sudah melakukan pembayaran dan ingin konfirmasi.%0A%0AOrder ID: ${orderId}%0ANama: ${name}%0AProduk: ${product}%0ADurasi: 1 Bulan sharing%0ATotal: ${currentPriceText}%0AMetode: ${method}%0AWaktu: ${formattedTime}%0A%0ASaya akan kirim screenshot invoice/pesanan + bukti pembayaran setelah ini. Terima kasih.`;
             
             const adminNumber = "6282138188404";
