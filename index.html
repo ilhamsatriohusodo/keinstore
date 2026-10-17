@@ -97,6 +97,20 @@
         <p>&copy; 2026 KeinStore. All rights reserved.</p>
     </footer>
 
+    <!-- MODAL CUSTOM NOTIFICATION -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-2xl text-center border border-indigo-100 animate-in fade-in zoom-in duration-200">
+            <div class="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-md text-white text-xl">
+                🛒
+            </div>
+            <h4 class="font-bold text-indigo-950 text-base mb-1">Berhasil Ditambahkan!</h4>
+            <p id="custom-alert-msg" class="text-xs text-slate-500 mb-5 leading-relaxed">Produk telah dimasukkan ke keranjang.</p>
+            <button onclick="closeCustomAlert()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition shadow-md cursor-pointer">
+                OK, Lanjut Belanja 👍
+            </button>
+        </div>
+    </div>
+
     <!-- MODAL DETAIL PRODUK -->
     <div id="detail-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
@@ -182,7 +196,7 @@
                 <div id="qris-section" class="border border-dashed border-indigo-200 rounded-xl p-4 bg-indigo-50/40 text-center">
                     <p class="text-xs font-bold text-indigo-950 mb-2">Scan QRIS untuk Pembayaran</p>
                     <div class="bg-white p-2 inline-block rounded-lg shadow-sm border border-indigo-100 mb-2">
-                        <img src="qris.jpeg" alt="QRIS KeinStore" class="w-48 h-auto mx-auto rounded block">
+                        <img src="qris.jpeg" alt="QRIS GanzNingz Store" class="w-48 h-auto mx-auto rounded block">
                     </div>
                     <p class="text-xs text-slate-500">Merchant: <strong class="text-indigo-950">GanzNingz Store</strong></p>
                     <p id="checkout-modal-price" class="text-sm font-extrabold text-blue-700 mt-1">Rp 0</p>
@@ -284,7 +298,7 @@
                 price: 30000, 
                 formattedPrice: "Rp 30.000", 
                 desc: "🚀 Nikmati fitur canggih Google AI tingkat lanjut untuk bantu nulis, riset, dan produktivitas harianmu!", 
-                badge: "AI Pro",
+                badge: "AI Plus",
                 detail: "<b>Gemini AI Plus 1 Bulan (Sharing)</b><br><br>🚀 <b>Fasilitas Utama:</b><br>• Akses model AI tingkat lanjut dari Google untuk riset dan analisis.<br>• Kapasitas konteks luas untuk membantu produktivitas harian.<br>• Akun disediakan langsung <b>dari admin</b>.<br><br>🛡️ <b>Garansi:</b> Full garansi 1 bulan penuh.<br><br>📌 <b>Ketentuan:</b> Bergaransi dan didukung penuh selama masa langganan." 
             }
         ];
@@ -316,6 +330,16 @@
         let cart = [];
         let checkoutItems = []; 
         let activeDetailProduct = null;
+
+        // Fungsi Menampilkan Custom Alert yang Rapi
+        function showCustomAlert(message) {
+            document.getElementById('custom-alert-msg').innerText = message;
+            document.getElementById('custom-alert-modal').classList.remove('hidden');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('custom-alert-modal').classList.add('hidden');
+        }
 
         // Render Produk ke Grid (Support Filtering)
         function renderProducts(list) {
@@ -402,7 +426,7 @@
                 cart.push({ ...product, qty: 1 });
             }
             updateCartUI();
-            alert(`Berhasil menambahkan "${product.name}" ke keranjang! 🛒`);
+            showCustomAlert(`Berhasil menambahkan "${product.name}" ke keranjang! 🛒`);
         }
 
         function updateCartUI() {
