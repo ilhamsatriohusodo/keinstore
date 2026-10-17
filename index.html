@@ -33,7 +33,7 @@
                 </div>
                 
                 <!-- Tombol Keranjang Belanja di Header -->
-                <button onclick="openCartModal()" class="relative bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-xl shadow-md transition flex items-center space-x-2 text-xs font-bold">
+                <button onclick="openCartModal()" class="relative bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-xl shadow-md transition flex items-center space-x-2 text-xs font-bold cursor-pointer">
                     <span>🛒 Keranjang</span>
                     <span id="cart-badge" class="bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full text-[10px] font-extrabold hidden">0</span>
                 </button>
@@ -57,7 +57,7 @@
         <!-- Section Katalog -->
         <div class="mb-4 flex items-center justify-between">
             <h3 class="font-bold text-lg text-indigo-950">Daftar Produk Ready</h3>
-            <span class="text-xs text-indigo-500 font-medium">Tap produk untuk tambah ke keranjang</span>
+            <span class="text-xs text-indigo-500 font-medium">Pilih Beli Langsung atau ke Keranjang</span>
         </div>
 
         <!-- Grid Produk -->
@@ -85,7 +85,7 @@
     <!-- MODAL DETAIL PRODUK -->
     <div id="detail-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
-            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold cursor-pointer">&times;</button>
             
             <div class="flex items-center space-x-2 mb-2">
                 <span class="text-xl">📋</span>
@@ -97,16 +97,21 @@
                 <!-- Konten dinamis -->
             </div>
 
-            <button id="btn-add-from-detail" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md">
-                + Masukkan ke Keranjang 🛒
-            </button>
+            <div class="grid grid-cols-2 gap-2">
+                <button id="btn-add-cart-detail" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-3 rounded-xl text-xs transition text-center cursor-pointer">
+                    + Keranjang 🛒
+                </button>
+                <button id="btn-direct-checkout-detail" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition text-center shadow-md cursor-pointer">
+                    Beli Langsung ⚡
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- MODAL KERANJANG BELANJA -->
     <div id="cart-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
-            <button onclick="closeCartModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+            <button onclick="closeCartModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold cursor-pointer">&times;</button>
             
             <h3 class="text-lg font-bold text-indigo-950 mb-1">🛒 Keranjang Belanja Anda</h3>
             <p class="text-xs text-slate-500 mb-4">Daftar produk yang ingin Anda beli sekaligus.</p>
@@ -120,7 +125,7 @@
                 <span id="cart-total-price" class="text-base font-extrabold text-blue-700">Rp 0</span>
             </div>
 
-            <button onclick="proceedToCheckout()" id="btn-proceed-checkout" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md hidden">
+            <button onclick="proceedCartCheckout()" id="btn-proceed-checkout" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md hidden cursor-pointer">
                 Lanjut ke Pembayaran 🚀
             </button>
         </div>
@@ -129,7 +134,7 @@
     <!-- MODAL CHECKOUT & PEMBAYARAN -->
     <div id="checkout-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-indigo-50">
-            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold cursor-pointer">&times;</button>
             
             <h3 class="text-lg font-bold text-indigo-950 mb-1">Konfirmasi Pesanan</h3>
             <p class="text-xs text-slate-500 mb-4">Pilih metode pembayaran dan lengkapi data diri Anda.</p>
@@ -186,7 +191,7 @@
                     💡 <b>Catatan:</b> Setelah mengklik tombol di bawah, Anda akan diarahkan ke WhatsApp Admin. Silakan kirimkan screenshot bukti transfer/pembayaran di chat tersebut agar pesanan langsung diproses!
                 </div>
 
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md flex items-center justify-center space-x-2">
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition shadow-md flex items-center justify-center space-x-2 cursor-pointer">
                     <span>Kirim Pesanan ke WhatsApp Admin</span>
                 </button>
             </form>
@@ -294,10 +299,11 @@
         };
 
         let cart = [];
+        let checkoutItems = []; // Menyimpan item yang sedang dicheckout (bisa dari cart atau direct buy)
         let activeDetailProduct = null;
         const grid = document.getElementById('product-grid');
 
-        // Render Produk
+        // Render Produk ke Grid
         products.forEach(p => {
             const card = document.createElement('div');
             card.className = "bg-white border border-indigo-100 rounded-2xl p-4 flex flex-col justify-between shadow-sm hover:shadow-md hover:border-indigo-300 transition";
@@ -312,12 +318,15 @@
                 </div>
                 <div class="space-y-2">
                     <div class="text-blue-700 font-extrabold text-lg">${p.formattedPrice}</div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick='openDetailModal(${JSON.stringify(p)})' class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-2 rounded-xl text-xs transition text-center">
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <button onclick='openDetailModal(${JSON.stringify(p)})' class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-1 rounded-xl text-[11px] transition text-center cursor-pointer">
                             📖 Detail
                         </button>
-                        <button onclick='addToCart(${JSON.stringify(p)})' class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-2 rounded-xl text-xs transition text-center shadow-xs">
-                            + Keranjang
+                        <button onclick='addToCart(${JSON.stringify(p)})' class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-semibold py-2 px-1 rounded-xl text-[11px] transition text-center cursor-pointer">
+                            + 🛒
+                        </button>
+                        <button onclick='directCheckout(${JSON.stringify(p)})' class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-1 rounded-xl text-[11px] transition text-center shadow-xs cursor-pointer">
+                            Beli ⚡
                         </button>
                     </div>
                 </div>
@@ -330,10 +339,16 @@
             activeDetailProduct = product;
             document.getElementById('detail-title').innerText = product.name;
             document.getElementById('detail-content').innerHTML = product.detail;
-            document.getElementById('btn-add-from-detail').onclick = function() {
+            
+            document.getElementById('btn-add-cart-detail').onclick = function() {
                 addToCart(product);
                 closeDetailModal();
             };
+            document.getElementById('btn-direct-checkout-detail').onclick = function() {
+                closeDetailModal();
+                directCheckout(product);
+            };
+
             document.getElementById('detail-modal').classList.remove('hidden');
         }
 
@@ -393,7 +408,7 @@
                     </div>
                     <div class="flex items-center space-x-2">
                         <span class="text-xs font-extrabold text-blue-700">Rp ${itemTotal.toLocaleString('id-ID')}</span>
-                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 font-bold text-xs px-1.5 py-0.5 bg-red-50 rounded">&times;</button>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 font-bold text-xs px-1.5 py-0.5 bg-red-50 rounded cursor-pointer">&times;</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -414,9 +429,20 @@
             openCartModal();
         }
 
-        function proceedToCheckout() {
+        function proceedCartCheckout() {
             closeCartModal();
-            const grandTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            checkoutItems = [...cart]; // Ambil seluruh isi keranjang untuk checkout
+            openCheckoutModal();
+        }
+
+        // Direct Checkout (Beli Langsung 1 Produk)
+        function directCheckout(product) {
+            checkoutItems = [{ ...product, qty: 1 }]; // Langsung set item tunggal
+            openCheckoutModal();
+        }
+
+        function openCheckoutModal() {
+            const grandTotal = checkoutItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
             document.getElementById('checkout-modal-price').innerText = `Total: Rp ${grandTotal.toLocaleString('id-ID')}`;
             document.getElementById('payment-method').value = "QRIS";
             togglePaymentDisplay();
@@ -459,16 +485,16 @@
             const timeStr = String(now.getHours()).padStart(2, '0') + '.' + String(now.getMinutes()).padStart(2, '0') + '.' + String(now.getSeconds()).padStart(2, '0');
             const formattedTime = `${dateStr}, ${timeStr}`;
 
-            // Rincian Produk dari Keranjang
+            // Rincian Produk Pesanan
             let productListStr = "";
             let grandTotal = 0;
-            cart.forEach((item, index) => {
+            checkoutItems.forEach((item, index) => {
                 const itemTotal = item.price * item.qty;
                 grandTotal += itemTotal;
                 productListStr += `%0A  ${index + 1}. ${item.name} (x${item.qty}) - Rp ${itemTotal.toLocaleString('id-ID')}`;
             });
 
-            const text = `Halo Admin Keinstore, saya sudah melakukan pembayaran dan ingin konfirmasi pesanan.%0A%0AOrder ID: ${orderId}%0ANama: ${name}%0ANo. WA: ${buyerWa}%0A%0ADaftar Produk Belanjaan:${productListStr}%0A%0ATotal Pembayaran: Rp ${grandTotal.toLocaleString('id-ID')}%0AMetode: ${method}%0AWaktu: ${formattedTime}%0A%0ASaya akan kirim screenshot invoice/pesanan + bukti pembayaran setelah ini. Terima kasih.`;
+            const text = `Halo Admin Keinstore, saya sudah melakukan pembayaran dan ingin konfirmasi pesanan.%0A%0AOrder ID: ${orderId}%0ANama: ${name}%0ANo. WA: ${buyerWa}%0A%0ADaftar Produk Pesanan:${productListStr}%0A%0ATotal Pembayaran: Rp ${grandTotal.toLocaleString('id-ID')}%0AMetode: ${method}%0AWaktu: ${formattedTime}%0A%0ASaya akan kirim screenshot invoice/pesanan + bukti pembayaran setelah ini. Terima kasih.`;
             
             const adminNumber = "6282138188404";
             window.open(`https://wa.me/${adminNumber}?text=${text}`, '_blank');
